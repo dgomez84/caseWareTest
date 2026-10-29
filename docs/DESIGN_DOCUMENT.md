@@ -11,7 +11,7 @@ To satisfy strict contractual and regulatory **Data Residency** requirements (`E
 flowchart TB
     subgraph Global["Global Control Plane (AWS - Zero Client/Firm Data)"]
         TDB[("Template Version DB (DynamoDB/S3)\nGit-like Version DAG (Branches & Commits)")]
-        DIFF["Diff & AI Summary Service (Java 21)\n(RFC 6902 JSON Diff + Bedrock LLM + Deterministic Gate)"]
+        DIFF["Diff & AI Summary Service (Java 25 LTS)\n(RFC 6902 JSON Diff + Bedrock LLM + Deterministic Gate)"]
         SUM_STORE[("Immutable Summary Store\nDynamoDB Global Table + S3 Object Lock (WORM)")]
         SNS["AWS SNS Global Topic\n(TemplateLifecycleEvents)"]
         
@@ -24,7 +24,7 @@ flowchart TB
         SQS["Regional AWS SQS + DLQ"]
         SNS -->|"4. Cross-Region Fan-Out"| SQS
 
-        subgraph EKS["Regional AWS EKS Cluster (Java 21 Microservices)"]
+        subgraph EKS["Regional AWS EKS Cluster (Java 25 LTS Microservices)"]
             GATEWAY["Regional API Gateway + Auth Router\n(Routes by firm_id & home_region in JWT)"]
             QUERY_API["Update Evaluation Service\n(Local Caffeine DAG Cache + UI Queries)"]
             WORKER["Template-Publish Fan-Out Worker (Part 2)\n(Virtual Threads + Capacity Governor + Tenant Fairness)"]
@@ -110,7 +110,7 @@ Opening an engagement takes **~1 minute per file** (hard constraint), and all sy
     $$173 \text{ publishes/month} \times 5 \text{ version pairs} = \mathbf{865 \text{ summaries/month}}$$
   - At `~10k` input tokens + `~1k` output tokens on AWS Bedrock (Claude 3.5 Sonnet, including verification pass) $\approx \$0.045\text{/summary}$: **$865 \times \$0.045 = \mathbf{\$38.92 \text{ USD/month}}$**.
 - **Storage & Messaging (DynamoDB + S3 WORM + SNS/SQS):** `~6 GB` total storage (`<$2/mo`) + `15M` reads & `5M` writes On-Demand (`~$15/mo`) = **`~$17.00 USD/month`**.
-- **Compute (AWS EKS):** 6 lightweight Java 21 pods (`0.5 vCPU, 1 GB RAM` using Virtual Threads, 2 per region across 3 regions) = **`~$160.00 USD/month`**.
+- **Compute (AWS EKS):** 6 lightweight Java 25 LTS pods (`0.5 vCPU, 1 GB RAM` using Virtual Threads, 2 per region across 3 regions) = **`~$160.00 USD/month`**.
 - **Total Estimated Monthly Run Cost:** **`~$216 USD/month`** ($\ll \$500\text{/month}$).
 
 ### 3.4. Observability & SLOs (New Relic / CloudWatch)

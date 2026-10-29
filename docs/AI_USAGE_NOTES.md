@@ -7,7 +7,7 @@
 ## 1. Where AI Helped Me
 1. **Spec-Driven Structuring & Bilingual Verification:** As a native Spanish speaker working in global English environments, I used the AI assistant to maintain synchronized Spanish and English mirrors of our Technical Requirements Specification and Architecture Design Document. This allowed rapid, zero-ambiguity validation of every architectural nuance before committing to code.
 2. **Scale & Cost Arithmetic Cross-Checking:** AI accelerated the tabulation of capacity and cost models—specifically contrasting naive per-engagement LLM summarization ($3.46\text{M calls/month} \approx \$34.6\text{k/month}$) against DAG version-pair caching ($865\text{ calls/month} \approx \$39\text{/month}$), DynamoDB storage sizing, and off-peak backfill duration math.
-3. **Java 21 Boilerplate & Failure-Injection Test Harnessing:** Once interfaces and concurrency invariants were locked in the specification, AI accelerated writing immutable Java `record` types, hexagonal port interfaces, and deterministic JUnit 5 concurrency tests simulating downstream `429` throttling, retries, and partial batch failures.
+3. **Java 25 LTS Boilerplate & Failure-Injection Test Harnessing:** Once interfaces and concurrency invariants were locked in the specification, AI accelerated writing immutable Java `record` types, hexagonal port interfaces, and deterministic JUnit 5 concurrency tests simulating downstream `429` throttling, retries, and partial batch failures.
 
 ---
 
