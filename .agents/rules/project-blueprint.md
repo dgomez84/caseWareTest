@@ -20,7 +20,8 @@ description: Blueprint and specification rules for regenerating and evolving the
 - `port/`: Hexagonal ports (`EngagementLookupPort`, `DownstreamEngagementProcessorPort`, `FanOutIdempotencyStorePort`, `TemplateVersionLifecyclePort`, `DeadLetterPort`).
 - `exception/`: `DownstreamProcessingException`, `RetryableDownstreamException`, `DownstreamThrottledException`, `NonRetryableDownstreamException`.
 - `resilience/`: `DownstreamCapacityGovernor`, `FairTenantScheduler`, `RetryPolicyConfig`.
-- `worker/`: `TemplatePublishFanOutWorker` (`@Service`).
+- `simulation/`: `FanOutSimulationRunner` (Interactive CLI/IntelliJ simulation enabled by default on `bootRun` and disabled in `@SpringBootTest`).
+- `worker/`: `TemplatePublishFanOutWorker` (`@Service`, instrumented with Micrometer `MeterRegistry` counters and gauge).
 
 ## 3. Mandatory Verification Suite (`TemplatePublishFanOutWorkerTest` & `TemplatePublishFanOutWorkerSpringTest`)
 Every modification must keep all unit and Spring Boot integration tests passing:

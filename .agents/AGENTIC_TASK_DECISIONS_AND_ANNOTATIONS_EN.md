@@ -41,14 +41,12 @@
 | **ADR-05** | Generate AI summaries per **version pair `(template_id, from_v -> to_v)`** ($O(\text{Version Pairs})$) + Deterministic Gate + **S3 Object Lock (WORM)**. | **Covered** | Cuts LLM cost from `$34,600/mo` to `~$39/mo` and guarantees March $\rightarrow$ November regulatory defensibility via `SHA-256`. |
 | **ADR-06** | **Challenged Requirement:** Challenge *"within seconds"* publish visibility in favor of `< 2 min` post-verification + canary window. | **Covered** | Protects 4,000 firms against defective versions that are withdrawn shortly after publish. |
 | **ADR-07** | **Part 2 Stack:** Gradle `9.8.2` + Version Catalog (`libs.versions.toml`) + Spring Boot `4.1.2` + Virtual Threads + Permit release before retry sleep + Round-Robin tenant fairness. | **Covered** | Defined and refined directly by Daniel. |
+| **ADR-08** | **GitHub Branching & Merge Strategy:** Maintain `feature/template-publish-fan-out-worker-java21` (Java 21 LTS), `feature/template-publish-fan-out-worker-java25` (Java 25 LTS), and merge `java25` into `main` while keeping both feature branches published. | **Covered** | Satisfies the JD preference (*"Java 21 or Java 25 preferred"*) while keeping `main` on the latest LTS. |
+| **ADR-09** | **Micrometer (`MeterRegistry`) Observability Instrumentation:** Inject `MeterRegistry` into `TemplatePublishFanOutWorker` recording counters (`completed`, `skipped.idempotent`, `skipped.obsolete`, `failed.dlq`, `downstream.throttled`) and gauge (`downstream.inflight`). | **Covered** | Directly connects Section 3 observability metrics in the Design Document to the code (including on the Java 21 branch). |
+| **ADR-10** | **Interactive Simulation (`FanOutSimulationRunner`) & JDK Auto-Provisioning (`foojay-resolver`):** Enable interactive demo by default on `bootRun` / IntelliJ Run while disabling it in `@SpringBootTest`, plus automatic JDK provisioning via Foojay. | **Covered** | Enables Caseware evaluators to clone any branch and run tests or the live simulation in 1 click with zero manual setup. |
 
-### B. Open Decisions / Questions for Daniel (`Open Decisions`)
-1. **Default Branch Strategy on GitHub Submission:**
-   - *Options:* (a) Merge `feature/template-publish-fan-out-worker-java25` into `main` while keeping `java21` branch available, or (b) keep `java21` on `main` and `java25` on its dedicated branch (documented in `README.md`).
-2. **Optional Micrometer Metrics (`MeterRegistry`) in `TemplatePublishFanOutWorker`:**
-   - Do we want to inject Micrometer's `MeterRegistry` into `TemplatePublishFanOutWorker` to emit counters (`fanout.completed`, `fanout.dlq`, `downstream.throttled`), or keep the class focused purely on the 5 hexagonal ports?
-3. **Submission Format for Part 1 Design Document:**
-   - The prompt accepts PDF or Markdown. It is already in `docs/DESIGN_DOCUMENT.md`, and we can also export a formatted PDF to attach to the email.
+### B. Single Remaining Decision for Final Submission (`T-19`)
+- [ ] **Email Attachment Format for Melissa Múnera:** In addition to the GitHub repository link (`https://github.com/dgomez84/caseWareTest.git`) containing `docs/DESIGN_DOCUMENT.md` and `docs/AI_USAGE_NOTES.md`, decide whether to also attach PDF exports directly to the reply email.
 
 ---
 

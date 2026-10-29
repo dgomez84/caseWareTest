@@ -41,14 +41,12 @@
 | **ADR-05** | Generación de resúmenes IA por **par de versiones `(template_id, from_v -> to_v)`** ($O(\text{Version Pairs})$) + Compuerta Determinista + **S3 Object Lock (WORM)**. | **Cubierta** | Reduce el costo de IA de `$34,600/mes` a `~$39/mes` y garantiza defendibilidad regulatoria de Marzo a Noviembre mediante hash `SHA-256`. |
 | **ADR-06** | **Requisito desafiado:** Desafiar la visibilidad *"en segundos"* tras publicar a favor de `< 2 min` post-validación IA + ventana Canary. | **Cubierta** | Protege contra versiones defectuosas que se retiran poco después de publicarse. |
 | **ADR-07** | **Stack Parte 2:** Gradle `9.8.2` + Version Catalog (`libs.versions.toml`) + Spring Boot `4.1.2` + Virtual Threads + Semáforo liberado antes del backoff + Round-Robin por firma. | **Cubierta** | Definido y corregido directamente por Daniel. |
+| **ADR-08** | **Estrategia de Ramas y Entrega en GitHub:** Rama `feature/template-publish-fan-out-worker-java21` (Java 21 LTS), rama `feature/template-publish-fan-out-worker-java25` (Java 25 LTS) y merge final de `java25` hacia `main` conservando ambas ramas publicadas. | **Cubierta** | Cumple con la preferencia del JD (*"Java 21 or Java 25 preferred"*) y deja `main` en la última LTS estable. |
+| **ADR-09** | **Instrumentación con Micrometer (`MeterRegistry`):** Inyección de `MeterRegistry` en `TemplatePublishFanOutWorker` registrando contadores (`completed`, `skipped.idempotent`, `skipped.obsolete`, `failed.dlq`, `downstream.throttled`) y gauge (`downstream.inflight`). | **Cubierta** | Conecta directamente las métricas de observabilidad de la Sección 3 del diseño con la implementación en código (incluyendo en la rama Java 21). |
+| **ADR-10** | **Simulación Interactiva (`FanOutSimulationRunner`) y Auto-Provisioning de JDK (`foojay-resolver`):** Ejecución demostrativa activa por defecto en `bootRun` / IntelliJ Run y desactivada en `@SpringBootTest`, más descarga automática del JDK vía Foojay. | **Cubierta** | Permite a cualquier evaluador de Caseware clonar y probar tanto los tests como la simulación en 1 clic sin configuración manual. |
 
-### B. Decisiones y Preguntas Pendientes por Cubrir (`Open Decisions`)
-1. **¿Qué rama dejamos como `main` (o rama por defecto) en GitHub al entregar?**
-   - *Opciones:* (a) Hacer merge de `feature/template-publish-fan-out-worker-java25` a `main` dejando la rama `java21` disponible como referencia, o (b) dejar `java21` en `main` y `java25` en su rama dedicada (y mencionarlo en el `README.md`).
-2. **¿Queremos inyectar `MeterRegistry` (Micrometer) dentro de `TemplatePublishFanOutWorker`?**
-   - En la Sección 3 del documento de diseño mencionamos métricas clave (`fanout.completed`, `fanout.dlq`, `downstream.throttled`). Podemos mantener el worker sin dependencias extra o inyectar `MeterRegistry` de Spring Boot / Micrometer para registrar contadores reales en el código.
-3. **¿En qué formato prefieres enviar el *Design Document* a Melissa?**
-   - El enunciado dice: *"1. Design document (PDF or Markdown)"*. Ya está en Markdown dentro de `docs/DESIGN_DOCUMENT.md` en el repo, y también podemos generar un PDF limpio a partir de él para adjuntarlo en el correo.
+### B. Única Decisión Pendiente para el Cierre Final (`T-19`)
+- [ ] **Formato de adjunto en el correo a Melissa Múnera:** Además del enlace al repositorio GitHub (`https://github.com/dgomez84/caseWareTest.git`) que ya incluye `docs/DESIGN_DOCUMENT.md` y `docs/AI_USAGE_NOTES.md`, decidir si adjuntamos también copias en PDF en el correo de respuesta.
 
 ---
 
