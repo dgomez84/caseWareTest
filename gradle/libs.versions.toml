@@ -1,0 +1,16 @@
+[versions]
+java = "21"
+spring-boot = "4.1.2"
+spring-dependency-management = "1.1.7"
+assertj = "3.27.3"
+
+[libraries]
+spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter" }
+micrometer-core = { module = "io.micrometer:micrometer-core" }
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+
+[plugins]
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
