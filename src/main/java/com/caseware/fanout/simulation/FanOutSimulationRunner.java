@@ -59,7 +59,7 @@ public class FanOutSimulationRunner implements CommandLineRunner {
         MeterRegistry meterRegistry = new SimpleMeterRegistry();
 
         TemplatePublishFanOutWorker simulationWorker = new TemplatePublishFanOutWorker(
-                (tpl, branch, ver) -> engagements,
+                (_, _, _) -> engagements,
                 (eng, evt) -> {
                     if ("ENG-CORRUPT-422".equals(eng.engagementId())) {
                         throw new NonRetryableDownstreamException("422 Unprocessable Entity: corrupt workpaper metadata");
@@ -77,8 +77,8 @@ public class FanOutSimulationRunner implements CommandLineRunner {
                             eng.engagementId(), eng.firmId(), evt.targetVersion());
                 },
                 idempotencyStore,
-                (tpl, branch, ver) -> TemplateVersionState.PUBLISHED,
-                (eng, evt, cause, attempts) -> log.error("[DLQ] Routed engagement={} (firm={}) to DLQ after {} attempt(s): {}",
+                (_, _, _) -> TemplateVersionState.PUBLISHED,
+                (eng, _, cause, attempts) -> log.error("[DLQ] Routed engagement={} (firm={}) to DLQ after {} attempt(s): {}",
                         eng.engagementId(), eng.firmId(), attempts, cause.getMessage()),
                 governor,
                 new RetryPolicyConfig(3, Duration.ofMillis(30), Duration.ofMillis(100), 2.0, true),

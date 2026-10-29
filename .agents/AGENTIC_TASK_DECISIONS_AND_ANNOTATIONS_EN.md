@@ -24,7 +24,7 @@
 - [x] **T-15:** Verify clean Gradle `9.8.2` + Spring Boot `4.1.2` test execution in IntelliJ IDEA Ultimate on branch `feature/template-publish-fan-out-worker-java21`.
 - [x] **T-16:** Integrate **Micrometer (`MeterRegistry`)** in `TemplatePublishFanOutWorker`.
 - [x] **T-17:** Commit and push branch `feature/template-publish-fan-out-worker-java21` to GitHub.
-- [ ] **T-18:** Create branch **`feature/template-publish-fan-out-worker-java25`**, migrate project and Toolchain to **Java 25 LTS**, verify tests, and merge into `main` (subject to prior commit message and push approval).
+- [x] **T-18:** Create branch **`feature/template-publish-fan-out-worker-java25`**, migrate project and Toolchain to **Java 25 LTS**, verify tests, and merge into `main` (subject to prior commit message and push approval).
 - [ ] **T-19:** Final formatting review and submission preparation for Melissa Múnera.
 
 ---

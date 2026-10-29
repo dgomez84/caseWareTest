@@ -19,7 +19,7 @@ public class InMemoryFanOutIdempotencyStore implements FanOutIdempotencyStorePor
     @Override
     public boolean tryClaim(IdempotencyKey key) {
         AtomicBoolean claimed = new AtomicBoolean(false);
-        store.compute(key, (k, existing) -> {
+        store.compute(key, (_, existing) -> {
             if (existing == ProcessingStatus.COMPLETED || existing == ProcessingStatus.IN_PROGRESS) {
                 return existing;
             }

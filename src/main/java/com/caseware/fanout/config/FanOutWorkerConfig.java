@@ -62,7 +62,7 @@ public class FanOutWorkerConfig {
     @Bean
     @ConditionalOnMissingBean
     public EngagementLookupPort defaultEngagementLookupPort() {
-        return (templateId, marketBranch, targetVersion) -> List.of();
+        return (_, _, _) -> List.of();
     }
 
     @Bean
@@ -77,13 +77,13 @@ public class FanOutWorkerConfig {
     @Bean
     @ConditionalOnMissingBean
     public TemplateVersionLifecyclePort defaultTemplateVersionLifecyclePort() {
-        return (templateId, marketBranch, version) -> TemplateVersionState.PUBLISHED;
+        return (_, _, _) -> TemplateVersionState.PUBLISHED;
     }
 
     @Bean
     @ConditionalOnMissingBean
     public DeadLetterPort defaultDeadLetterPort() {
-        return (engagement, event, cause, attemptsMade) -> log.error(
+        return (engagement, _, cause, attemptsMade) -> log.error(
                 "Routed engagement={} to DLQ after {} attempts: {}",
                 engagement.engagementId(), attemptsMade, cause.getMessage()
         );

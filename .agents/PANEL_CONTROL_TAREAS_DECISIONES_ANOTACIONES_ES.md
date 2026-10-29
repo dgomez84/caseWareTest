@@ -24,7 +24,7 @@
 - [x] **T-15:** Confirmar ejecución limpia en IntelliJ IDEA Ultimate con Gradle `9.8.2` y Spring Boot `4.1.2` en la rama `feature/template-publish-fan-out-worker-java21`.
 - [x] **T-16:** Integrar **Micrometer (`MeterRegistry`)** en `TemplatePublishFanOutWorker`.
 - [x] **T-17:** Realizar commit y push de la rama `feature/template-publish-fan-out-worker-java21` a GitHub.
-- [ ] **T-18:** Crear la rama **`feature/template-publish-fan-out-worker-java25`**, migrar el proyecto y su Toolchain a **Java 25 LTS**, verificar pruebas y hacer merge hacia `main` (previa aprobación de mensaje de commit y push).
+- [x] **T-18:** Crear la rama **`feature/template-publish-fan-out-worker-java25`**, migrar el proyecto y su Toolchain a **Java 25 LTS**, verificar pruebas y hacer merge hacia `main` (previa aprobación de mensaje de commit y push).
 - [ ] **T-19:** Revisión final de formato y preparación de entrega para responder el correo a Melissa Múnera.
 
 ---

@@ -1,7 +1,8 @@
 # Caseware Staff Java Software Developer — Take-Home Exercise
 
 **Candidate:** Daniel Julián Gómez Silva  
-**Tech Stack:** Java 21 / Java 25 LTS (Virtual Threads), Spring Boot `4.1.2`, Gradle `9.8.2` (Version Catalog), JUnit 5, AssertJ
+**Tech Stack:** Java 25 LTS (Virtual Threads, JEP 513 Flexible Constructor Bodies, JEP 456 Unnamed Variables), Spring Boot `4.1.2`, Gradle `9.8.2` (Version Catalog), Micrometer, JUnit 5, AssertJ  
+*(Note: The Java 21 LTS baseline implementation is preserved on branch [`feature/template-publish-fan-out-worker-java21`](https://github.com/dgomez84/caseWareTest/tree/feature/template-publish-fan-out-worker-java21)).*
 
 ---
 

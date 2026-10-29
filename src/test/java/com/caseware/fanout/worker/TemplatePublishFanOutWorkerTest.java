@@ -72,11 +72,11 @@ class TemplatePublishFanOutWorkerTest {
 
         DownstreamCapacityGovernor governor = new DownstreamCapacityGovernor(maxConcurrency);
         TemplatePublishFanOutWorker worker = new TemplatePublishFanOutWorker(
-                (tpl, branch, ver) -> engagements,
+                (_, _, _) -> engagements,
                 downstreamPort,
                 new InMemoryFanOutIdempotencyStore(),
-                (tpl, branch, ver) -> TemplateVersionState.PUBLISHED,
-                (eng, evt, cause, attempts) -> {},
+                (_, _, _) -> TemplateVersionState.PUBLISHED,
+                (_, _, _, _) -> {},
                 governor,
                 new RetryPolicyConfig(2, Duration.ofMillis(10), Duration.ofMillis(50), 2.0, false)
         );
@@ -102,11 +102,11 @@ class TemplatePublishFanOutWorkerTest {
         FanOutIdempotencyStorePort idempotencyStore = new InMemoryFanOutIdempotencyStore();
 
         TemplatePublishFanOutWorker worker = new TemplatePublishFanOutWorker(
-                (tpl, branch, ver) -> engagements,
-                (eng, evt) -> downstreamCallCount.incrementAndGet(),
+                (_, _, _) -> engagements,
+                (_, _) -> downstreamCallCount.incrementAndGet(),
                 idempotencyStore,
-                (tpl, branch, ver) -> TemplateVersionState.PUBLISHED,
-                (eng, evt, cause, attempts) -> {},
+                (_, _, _) -> TemplateVersionState.PUBLISHED,
+                (_, _, _, _) -> {},
                 new DownstreamCapacityGovernor(10),
                 RetryPolicyConfig.defaults()
         );
@@ -160,11 +160,11 @@ class TemplatePublishFanOutWorkerTest {
         );
 
         TemplatePublishFanOutWorker worker = new TemplatePublishFanOutWorker(
-                (tpl, branch, ver) -> List.of(eng1, eng2),
+                (_, _, _) -> List.of(eng1, eng2),
                 downstreamPort,
                 new InMemoryFanOutIdempotencyStore(),
-                (tpl, branch, ver) -> TemplateVersionState.PUBLISHED,
-                (eng, evt, cause, attempts) -> {},
+                (_, _, _) -> TemplateVersionState.PUBLISHED,
+                (_, _, _, _) -> {},
                 singlePermitGovernor,
                 retryPolicy
         );
@@ -204,17 +204,17 @@ class TemplatePublishFanOutWorkerTest {
             }
         };
 
-        DeadLetterPort deadLetterPort = (eng, evt, cause, attempts) -> {
+        DeadLetterPort deadLetterPort = (eng, _, _, attempts) -> {
             deadLetteredIds.add(eng.engagementId());
             deadLetterAttempts.put(eng.engagementId(), attempts);
         };
 
         FanOutIdempotencyStorePort idempotencyStore = new InMemoryFanOutIdempotencyStore();
         TemplatePublishFanOutWorker worker = new TemplatePublishFanOutWorker(
-                (tpl, branch, ver) -> List.of(healthy1, corruptPermanent, persistentTimeout, healthy2),
+                (_, _, _) -> List.of(healthy1, corruptPermanent, persistentTimeout, healthy2),
                 downstreamPort,
                 idempotencyStore,
-                (tpl, branch, ver) -> TemplateVersionState.PUBLISHED,
+                (_, _, _) -> TemplateVersionState.PUBLISHED,
                 deadLetterPort,
                 new DownstreamCapacityGovernor(4),
                 new RetryPolicyConfig(3, Duration.ofMillis(10), Duration.ofMillis(20), 1.5, false)
@@ -254,11 +254,11 @@ class TemplatePublishFanOutWorkerTest {
 
         // Use maxConcurrency = 1 to observe deterministic dispatch order
         TemplatePublishFanOutWorker worker = new TemplatePublishFanOutWorker(
-                (tpl, branch, ver) -> skewedInput,
-                (eng, evt) -> executionOrderByFirm.add(eng.firmId()),
+                (_, _, _) -> skewedInput,
+                (eng, _) -> executionOrderByFirm.add(eng.firmId()),
                 new InMemoryFanOutIdempotencyStore(),
-                (tpl, branch, ver) -> TemplateVersionState.PUBLISHED,
-                (eng, evt, cause, attempts) -> {},
+                (_, _, _) -> TemplateVersionState.PUBLISHED,
+                (_, _, _, _) -> {},
                 new DownstreamCapacityGovernor(1),
                 RetryPolicyConfig.defaults()
         );
@@ -281,7 +281,7 @@ class TemplatePublishFanOutWorkerTest {
         AtomicReference<TemplateVersionState> liveVersionState = new AtomicReference<>(TemplateVersionState.PUBLISHED);
         AtomicInteger processedCount = new AtomicInteger(0);
 
-        DownstreamEngagementProcessorPort downstreamPort = (engagement, event) -> {
+        DownstreamEngagementProcessorPort downstreamPort = (_, _) -> {
             int done = processedCount.incrementAndGet();
             if (done >= 5) {
                 // Content team withdraws v7 mid-flight!
@@ -296,11 +296,11 @@ class TemplatePublishFanOutWorkerTest {
 
         FanOutIdempotencyStorePort idempotencyStore = new InMemoryFanOutIdempotencyStore();
         TemplatePublishFanOutWorker worker = new TemplatePublishFanOutWorker(
-                (tpl, branch, ver) -> engagements,
+                (_, _, _) -> engagements,
                 downstreamPort,
                 idempotencyStore,
-                (tpl, branch, ver) -> liveVersionState.get(),
-                (eng, evt, cause, attempts) -> {},
+                (_, _, _) -> liveVersionState.get(),
+                (_, _, _, _) -> {},
                 new DownstreamCapacityGovernor(2),
                 RetryPolicyConfig.defaults()
         );
